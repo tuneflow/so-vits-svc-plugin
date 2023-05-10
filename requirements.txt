@@ -1,0 +1,20 @@
+tuneflow-devkit-py>=0.8.1
+# Flask
+# Flask_Cors
+# gradio
+numpy
+# pyworld==0.2.5
+scipy==1.7.3
+SoundFile==0.12.1
+torch==1.13.1
+torchaudio==0.13.1
+torchcrepe
+tqdm
+scikit-maad
+praat-parselmouth
+onnx
+onnxsim
+onnxoptimizer
+fairseq==0.12.2
+librosa==0.9.1
+edge_tts

@@ -1,0 +1,66 @@
+{
+  "plugins": [
+    {
+      "providerId": "andantei",
+      "providerDisplayName": {
+        "zh": "Andantei行板",
+        "en": "Andantei"
+      },
+      "pluginId": "singing-voice-clone",
+      "pluginDisplayName": {
+        "zh": "歌声克隆",
+        "en": "Singing Voice Clone"
+      },
+      "pluginDescription": {
+        "zh": "用新的声音重新演绎歌曲",
+        "en": "Sing a song with a new voice"
+      },
+      "version": "1.0.0",
+      "supportedPlatforms": ["desktop"],
+      "minRequiredDesktopVersion": "1.9.1",
+      "options": {
+        "allowReset": true,
+        "allowManualApplyAdjust": true
+      },
+      "triggers": [
+        {
+          "type": "selected-clips",
+          "config": {
+            "allowedClipTypes": ["audio"],
+            "maxNumClips": 1
+          }
+        }
+      ],
+      "notices": {
+        "copyrightDisclaimer": {
+          "title": {
+            "zh": "免责声明",
+            "en": "Disclaimer"
+          },
+          "content": {
+            "zh": "歌声模型仅供学术研究，其生成的歌声为虚拟合成，不代指任何真实世界的人物。软件仅供学术研究，请勿用于任何商业用途，软件对于生成结果免责。",
+            "en": "The singing voice model is for academic research only. The generated singing voice is virtually synthesized and does not refer to any real-world personnel. The software is for academic research only, please do not use it for any commercial purposes. The software is not responsible for the generated results."
+          },
+          "showPopup": true,
+          "requiresPopupConsent": true
+        },
+        "useSmallerClips": {
+          "title": {
+            "zh": "如何避免超时",
+            "en": "How to Avoid Timeout"
+          },
+          "content": {
+            "zh": "由于计算耗时可能较长，为避免超时，请尝试将你的音频分割为较短的片段并分别进行分轨。",
+            "en": "Due to high computation cost, try cutting your audio into shorter clips and then separate them one by one."
+          }
+        }
+      },
+      "icon": {
+        "0.5x": "https://s.tuneflow.com/images/plugins/icons/singing_voice_clone/singing_voice_clone@0.5x.png",
+        "1x": "https://s.tuneflow.com/images/plugins/icons/singing_voice_clone/singing_voice_clone@1x.png",
+        "2x": "https://s.tuneflow.com/images/plugins/icons/singing_voice_clone/singing_voice_clone@2x.png"
+      },
+      "categories": ["generate"]
+    }
+  ]
+}
