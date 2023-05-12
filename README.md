@@ -21,7 +21,7 @@ pip install -r requirements.txt
 Models are placed under the `checkpoints` folder, here is an example folder structure:
 
 ```
--- svc-plugin
+-- so-vits-svc-plugin
     ......
     -- checkpoints
         -- my_model_1
@@ -82,7 +82,7 @@ For the structure above, we should have a `models.json` like this:
 and the directory structure becomes like this:
 
 ```
--- svc-plugin
+-- so-vits-svc-plugin
     ......
     -- models.json
     -- checkpoints

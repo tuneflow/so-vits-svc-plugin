@@ -16,12 +16,16 @@ git clone https://github.com/tuneflow/so-vits-svc-plugin.git
 pip install -r requirements.txt
 ```
 
+## 训练自己的模型
+
+参考 [炼丹百科全书](https://docs.qq.com/doc/DUWdxS1ZaV29vZnlV)，有非常易用的网页版训练界面。
+
 ## 准备模型
 
 模型文件放置在 `checkpoints` 文件夹，以下是一个可能的文件结构：
 
 ```
--- svc-plugin
+-- so-vits-svc-plugin
     ......
     -- checkpoints
         -- my_model_1
@@ -85,7 +89,7 @@ pip install -r requirements.txt
 创建完毕后，整体的目录结构会是这样的:
 
 ```
--- svc-plugin
+-- so-vits-svc-plugin
     ......
     -- models.json
     -- checkpoints

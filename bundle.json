@@ -8,12 +8,12 @@
       },
       "pluginId": "singing-voice-clone",
       "pluginDisplayName": {
-        "zh": "歌声克隆",
-        "en": "Singing Voice Clone"
+        "zh": "智能变声器",
+        "en": "Smart Vocal Changer"
       },
       "pluginDescription": {
-        "zh": "用新的声音重新演绎指定歌声片段",
-        "en": "Sing a vocal clip with a new voice"
+        "zh": "用全新的声音演绎指定歌声片段",
+        "en": "Sing a vocal clip with a brand new voice"
       },
       "version": "1.0.0",
       "supportedPlatforms": ["desktop"],
@@ -43,6 +43,17 @@
           },
           "showPopup": true,
           "requiresPopupConsent": true
+        },
+        "applyOnVocalTrack": {
+          "title": {
+            "zh": "适用于纯人声轨道",
+            "en": "Suitable for Pure Vocal Track"
+          },
+          "content": {
+            "zh": "请确保你的音频中只包含人声。如果是伴奏+人声的音频，请先使用“智能音频分轨”功能将人声分离出来。",
+            "en": "Please make sure your audio only contains vocal. If it has accompaniment, please use the \"Smart Audio Source Separator\" plugin to separate the vocal out first."
+          },
+          "showPopup": true
         },
         "useSmallerClips": {
           "title": {
