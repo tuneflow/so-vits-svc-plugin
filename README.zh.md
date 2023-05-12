@@ -2,7 +2,13 @@
 
 [简体中文](./README.zh.md) | [English](./README.md)
 
-## 安装
+## 下载代码
+
+```bash
+git clone https://github.com/tuneflow/so-vits-svc-plugin.git
+```
+
+## 安装依赖
 
 注意：安装python依赖包时推荐使用virtualenv，这样可以将插件所需依赖与系统其他依赖分离开来。
 

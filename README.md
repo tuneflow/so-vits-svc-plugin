@@ -2,6 +2,12 @@
 
 [简体中文](./README.zh.md) | [English](./README.md)
 
+## Clone Repo
+
+```bash
+git clone https://github.com/tuneflow/so-vits-svc-plugin.git
+```
+
 ## Installation
 
 It is recommended to install through python virtual environments, so that these dependencies won't conflict with your existing pip packages.
