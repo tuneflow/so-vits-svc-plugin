@@ -14,46 +14,62 @@ from pydub import AudioSegment
 import json
 import traceback
 
-model = None
-spk = None
+cached_models = {}
+
 cuda = []
 if torch.cuda.is_available():
     for i in range(torch.cuda.device_count()):
         cuda.append("cuda:{}".format(i))
-
-model_path = str(Path(__file__).parent.joinpath(
-    'checkpoints').joinpath('sunyz').joinpath('G_27200.pth'))
-cluster_model_path = str(Path(__file__).parent.joinpath(
-    'checkpoints').joinpath('sunyz').joinpath('kmeans_10000.pt'))
-config_path = str(Path(__file__).parent.joinpath(
-    'checkpoints').joinpath('sunyz').joinpath('config.json'))
+f = open(Path(__file__).parent.joinpath('models.json'), "r")
+MODE_INVENTORY = json.load(f)
+f.close()
 
 
-def load_model_func(enhance, model_branch):
-    global model, cluster_model_path, spk
+def load_model_func(model_id):
+    global cached_models
+    if model_id in cached_models:
+        print('Using cached model')
+        return cached_models[model_id]["model"], cached_models[model_id]["spk"]
+    matched_model_specs = [m for m in MODE_INVENTORY if m["id"] == model_id]
+    if len(matched_model_specs) == 0:
+        raise ValueError(f"Model id not found: {model_id}")
+    if len(matched_model_specs) > 1:
+        raise ValueError(f"Multiple models with the same id: {model_id}")
 
+    model_spec = matched_model_specs[0]
+    config_path = str(Path(__file__).parent.joinpath('checkpoints').joinpath(
+        model_spec["dir"]).joinpath(model_spec["config"]))
     with open(config_path, 'r') as f:
         config = json.load(f)
     spk_dict = config["spk"]
-    ckpt_path = model_path
-    cluster_path = cluster_model_path
-    cluster_name = 'kmeans_10000.pt'
+    ckpt_path = str(Path(__file__).parent.joinpath('checkpoints').joinpath(
+        model_spec["dir"]).joinpath(model_spec["model"]))
+    cluster_path = str(Path(__file__).parent.joinpath('checkpoints').joinpath(
+        model_spec["dir"]).joinpath(model_spec["cluster"])) if "cluster" in model_spec else None
+    cluster_name = model_spec["cluster_name"] if "cluster_name" in model_spec else "no_clu"
+    model_branch = model_spec["model_branch"] if "model_branch" in model_spec else "v1"
+    hifigan_enhance = model_spec["hifigan_enhance"] if "hifigan_enhance" in model_spec else False
     if cluster_name == "no_clu" and model_branch == "v1":
-        model = Svc(ckpt_path, config_path, nsf_hifigan_enhance=enhance)
-    elif cluster_name == "no_clu" and model_branch == "Vec768-Layer12":
-        model = Svc_768l12(ckpt_path, config_path, nsf_hifigan_enhance=enhance)
-    elif cluster_name != "no_clu" and model_branch == "v1":
         model = Svc(ckpt_path, config_path,
-                    cluster_model_path=cluster_path, nsf_hifigan_enhance=enhance)
-    else:
+                    nsf_hifigan_enhance=hifigan_enhance)
+    elif cluster_name == "no_clu" and model_branch == "Vec768-Layer12":
+        model = Svc_768l12(ckpt_path, config_path,
+                           nsf_hifigan_enhance=hifigan_enhance)
+    elif cluster_name != "no_clu" and cluster_path is not None and model_branch == "v1":
+        model = Svc(ckpt_path, config_path,
+                    cluster_model_path=cluster_path, nsf_hifigan_enhance=hifigan_enhance)
+    elif cluster_path is not None:
         model = Svc_768l12(
-            ckpt_path, config_path, cluster_model_path=cluster_path, nsf_hifigan_enhance=enhance)
-
+            ckpt_path, config_path, cluster_model_path=cluster_path, nsf_hifigan_enhance=hifigan_enhance)
+    else:
+        raise ValueError("Invalid model config")
     spk_list = list(spk_dict.keys())
     spk = spk_list[0]
-
-
-load_model_func(enhance=False, model_branch="v1")
+    cached_models[model_id] = {
+        "model": model,
+        "spk": spk,
+    }
+    return model, spk
 
 
 def audio_from_file(filename, crop_min=0, crop_max=100):
@@ -79,9 +95,8 @@ def audio_from_file(filename, crop_min=0, crop_max=100):
     return audio.frame_rate, data
 
 
-def vc_fn(input_audio_path, vc_transform, auto_f0, cluster_ratio, slice_db, noise_scale, pad_seconds, cl_num, lg_num, lgr_num, F0_mean_pooling, enhancer_adaptive_key, cr_threshold):
-    global model, spk
-    sid = spk
+def vc_fn(model_id, input_audio_path, vc_transform, auto_f0, cluster_ratio, slice_db, noise_scale, pad_seconds, cl_num, lg_num, lgr_num, F0_mean_pooling, enhancer_adaptive_key, cr_threshold):
+    model, sid = load_model_func(model_id)
     try:
         if input_audio_path is None:
             return "You need to upload an audio", None
@@ -91,7 +106,7 @@ def vc_fn(input_audio_path, vc_transform, auto_f0, cluster_ratio, slice_db, nois
         audio = (audio / np.iinfo(audio.dtype).max).astype(np.float32)
         if len(audio.shape) > 1:
             audio = librosa.to_mono(audio.transpose(1, 0))
-        temp_file = tempfile.NamedTemporaryFile(delete=True,suffix='.wav')
+        temp_file = tempfile.NamedTemporaryFile(delete=True, suffix='.wav')
         temp_path = temp_file.name
         soundfile.write(temp_path, audio, sampling_rate, format="wav")
         try:
@@ -109,8 +124,3 @@ def vc_fn(input_audio_path, vc_transform, auto_f0, cluster_ratio, slice_db, nois
     except Exception as e:
         traceback.print_exc()
         return "Error", None
-
-
-def get_model_sample_rate():
-    global model
-    return model.target_sample

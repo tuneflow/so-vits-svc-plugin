@@ -18,3 +18,5 @@ onnxoptimizer
 fairseq==0.12.2
 librosa==0.9.1
 edge_tts
+matplotlib==3.7.1
+pydub==0.25.1

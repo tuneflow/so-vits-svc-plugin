@@ -12,8 +12,8 @@
         "en": "Singing Voice Clone"
       },
       "pluginDescription": {
-        "zh": "用新的声音重新演绎歌曲",
-        "en": "Sing a song with a new voice"
+        "zh": "用新的声音重新演绎指定歌声片段",
+        "en": "Sing a vocal clip with a new voice"
       },
       "version": "1.0.0",
       "supportedPlatforms": ["desktop"],

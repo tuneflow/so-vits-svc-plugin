@@ -4,7 +4,7 @@ from tuneflow_py import TuneflowPlugin, Song, ParamDescriptor, WidgetType, Track
 from typing import Any
 import tempfile
 import traceback
-from inferencer import vc_fn
+from inferencer import vc_fn, MODE_INVENTORY
 
 
 class SingingVoiceClone(TuneflowPlugin):
@@ -53,9 +53,9 @@ class SingingVoiceClone(TuneflowPlugin):
                     "config": {
                         "options": [
                             {
-                                "label": "YZ",
-                                "value": "yz"
-                            }
+                                "label": spec["name"],
+                                "value": spec["id"]
+                            } for spec in MODE_INVENTORY
                         ]
                     }
                 },
@@ -121,6 +121,7 @@ class SingingVoiceClone(TuneflowPlugin):
         pitchOffset: int = params["pitchOffset"]
         f0MeanPooling: bool = params["f0MeanPooling"]
         f0Threshold: float = params["f0Threshold"]
+        voiceLine: str = params['voiceLine']
         trigger: TuneflowPluginTriggerData = params["trigger"]
         trigger_entity_id = trigger["entities"][0]
         track = song.get_track_by_id(trigger_entity_id["trackId"])
@@ -136,7 +137,7 @@ class SingingVoiceClone(TuneflowPlugin):
         tmp_file.write(clip_audio_data_list[0]["audioData"]["data"])
 
         try:
-            result = vc_fn(tmp_file.name, vc_transform=pitchOffset, auto_f0=False, cluster_ratio=0, slice_db=-40,
+            result = vc_fn(voiceLine, tmp_file.name, vc_transform=pitchOffset, auto_f0=False, cluster_ratio=0, slice_db=-40,
                            noise_scale=0.4, pad_seconds=0.5, cl_num=0, lg_num=0, lgr_num=0.75, F0_mean_pooling=f0MeanPooling, enhancer_adaptive_key=0, cr_threshold=f0Threshold)
             if not result:
                 raise Exception("Failed to generate audio")
