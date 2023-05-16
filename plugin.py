@@ -1,10 +1,12 @@
 from __future__ import annotations
 
-from tuneflow_py import TuneflowPlugin, Song, ParamDescriptor, WidgetType, TrackType, InjectSource, TuneflowPluginTriggerData, ClipAudioDataInjectData
+from tuneflow_py import TuneflowPlugin, Song, Clip, ParamDescriptor, WidgetType, TrackType, InjectSource, TuneflowPluginTriggerData, ClipAudioDataInjectData
 from typing import Any
 import tempfile
 import traceback
 from inferencer import vc_fn, MODE_INVENTORY
+from io import BytesIO
+from pydub import AudioSegment
 
 
 class SingingVoiceClone(TuneflowPlugin):
@@ -32,13 +34,7 @@ class SingingVoiceClone(TuneflowPlugin):
                 "injectFrom": {
                     "type": InjectSource.ClipAudioData.value,
                     "options": {
-                        "clips": "selectedAudioClips",
-                        "convert": {
-                            "toFormat": "ogg",
-                            "options": {
-                                "sampleRate": 44100
-                            }
-                        }
+                        "clips": "selectedAudioClips"
                     }
                 }
             },
@@ -123,18 +119,20 @@ class SingingVoiceClone(TuneflowPlugin):
         f0Threshold: float = params["f0Threshold"]
         voiceLine: str = params['voiceLine']
         trigger: TuneflowPluginTriggerData = params["trigger"]
-        trigger_entity_id = trigger["entities"][0]
-        track = song.get_track_by_id(trigger_entity_id["trackId"])
+        trigger_entity_id = trigger["entities"][0]  # type:ignore
+        track = song.get_track_by_id(
+            trigger_entity_id["trackId"])  # type:ignore
         if track is None:
             raise Exception("Cannot find track")
-        clip = track.get_clip_by_id(trigger_entity_id["clipId"])
+        clip = track.get_clip_by_id(trigger_entity_id["clipId"])  # type:ignore
         if clip is None:
             raise Exception("Cannot find clip")
         clip_audio_data_list: ClipAudioDataInjectData = params["clipAudioData"]
 
         tmp_file = tempfile.NamedTemporaryFile(
             delete=True, suffix=clip_audio_data_list[0]["audioData"]["format"])
-        tmp_file.write(clip_audio_data_list[0]["audioData"]["data"])
+        tmp_file.write(SingingVoiceClone._trim_audio(
+            clip_audio_data_list[0]["audioData"]["data"], song, clip))
 
         try:
             result = vc_fn(voiceLine, tmp_file.name, vc_transform=pitchOffset, auto_f0=False, cluster_ratio=0, slice_db=-40,
@@ -142,12 +140,12 @@ class SingingVoiceClone(TuneflowPlugin):
             if not result:
                 raise Exception("Failed to generate audio")
             status, generated_data = result
-            if status != "Success":
+            if status != "Success" or generated_data is None:
                 raise Exception("Failed to generate audio")
             sample_rate, generated_audio_data = generated_data
             generated_audio_data.seek(0)
             new_track = song.create_track(
-                TrackType.AUDIO_TRACK, index=song.get_track_index(track.get_id())+1)
+                TrackType.AUDIO_TRACK, index=song.get_track_index(track.get_id())+1)  # type:ignore
             new_track.create_audio_clip(clip_start_tick=clip.get_clip_start_tick(), audio_clip_data={
                 "audio_data": {
                     "data": generated_audio_data.read(),
@@ -161,3 +159,17 @@ class SingingVoiceClone(TuneflowPlugin):
             tmp_file.close()
             raise e
         tmp_file.close()
+
+    @staticmethod
+    def _trim_audio(audio_bytes: bytes, song: Song, clip: Clip):
+        clip_start_time = song.tick_to_seconds(clip.get_clip_start_tick())
+        clip_end_time = song.tick_to_seconds(clip.get_clip_end_tick())
+        audio_start_time = song.tick_to_seconds(clip.get_audio_start_tick()) # type:ignore
+        in_bytes_io = BytesIO(audio_bytes)
+        dub = AudioSegment.from_file(in_bytes_io)
+        trimmed_dub = dub[(clip_start_time - audio_start_time)
+                          * 1000:(clip_end_time - audio_start_time)*1000]
+        output = BytesIO()
+        trimmed_dub.export(output, format="wav")
+        output.seek(0)
+        return output.read()
