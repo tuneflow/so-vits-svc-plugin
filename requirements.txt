@@ -1,4 +1,4 @@
-tuneflow-devkit-py>=0.8.1
+tuneflow-devkit-py>=0.8.4
 # Flask
 # Flask_Cors
 # gradio

@@ -129,13 +129,9 @@ class SingingVoiceClone(TuneflowPlugin):
             raise Exception("Cannot find clip")
         clip_audio_data_list: ClipAudioDataInjectData = params["clipAudioData"]
 
-        tmp_file = tempfile.NamedTemporaryFile(
-            delete=True, suffix=clip_audio_data_list[0]["audioData"]["format"])
-        tmp_file.write(SingingVoiceClone._trim_audio(
-            clip_audio_data_list[0]["audioData"]["data"], song, clip))
-
         try:
-            result = vc_fn(voiceLine, tmp_file.name, vc_transform=pitchOffset, auto_f0=False, cluster_ratio=0, slice_db=-40,
+            result = vc_fn(voiceLine, SingingVoiceClone._trim_audio(
+            clip_audio_data_list[0]["audioData"]["data"], song, clip), vc_transform=pitchOffset, auto_f0=False, cluster_ratio=0, slice_db=-40,
                            noise_scale=0.4, pad_seconds=0.5, cl_num=0, lg_num=0, lgr_num=0.75, F0_mean_pooling=f0MeanPooling, enhancer_adaptive_key=0, cr_threshold=f0Threshold)
             if not result:
                 raise Exception("Failed to generate audio")
@@ -156,9 +152,7 @@ class SingingVoiceClone(TuneflowPlugin):
             }, clip_end_tick=clip.get_clip_end_tick(), insert_clip=True)
         except Exception as e:
             print(traceback.format_exc())
-            tmp_file.close()
             raise e
-        tmp_file.close()
 
     @staticmethod
     def _trim_audio(audio_bytes: bytes, song: Song, clip: Clip):

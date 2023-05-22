@@ -72,17 +72,14 @@ def load_model_func(model_id):
     return model, spk
 
 
-def audio_from_file(filename, crop_min=0, crop_max=100):
+def audio_from_bytes(file_bytes, crop_min=0, crop_max=100):
     try:
-        audio = AudioSegment.from_file(filename)
+        input_file = BytesIO(file_bytes)
+        input_file.seek(0)
+        audio = AudioSegment.from_file(input_file)
     except FileNotFoundError as e:
-        isfile = Path(filename).is_file()
         msg = (
-            f"Cannot load audio from file: `{'ffprobe' if isfile else filename}` not found."
-            + " Please install `ffmpeg` in your system to use non-WAV audio file formats"
-            " and make sure `ffprobe` is in your PATH."
-            if isfile
-            else ""
+            f"Cannot load audio"
         )
         raise RuntimeError(msg) from e
     if crop_min != 0 or crop_max != 100:
@@ -95,14 +92,14 @@ def audio_from_file(filename, crop_min=0, crop_max=100):
     return audio.frame_rate, data
 
 
-def vc_fn(model_id, input_audio_path, vc_transform, auto_f0, cluster_ratio, slice_db, noise_scale, pad_seconds, cl_num, lg_num, lgr_num, F0_mean_pooling, enhancer_adaptive_key, cr_threshold):
+def vc_fn(model_id, input_audio_bytes, vc_transform, auto_f0, cluster_ratio, slice_db, noise_scale, pad_seconds, cl_num, lg_num, lgr_num, F0_mean_pooling, enhancer_adaptive_key, cr_threshold):
     model, sid = load_model_func(model_id)
     try:
-        if input_audio_path is None:
+        if input_audio_bytes is None:
             return "You need to upload an audio", None
         if model is None:
             return "You need to upload an model", None
-        sampling_rate, audio = audio_from_file(input_audio_path)
+        sampling_rate, audio = audio_from_bytes(input_audio_bytes)
         audio = (audio / np.iinfo(audio.dtype).max).astype(np.float32)
         if len(audio.shape) > 1:
             audio = librosa.to_mono(audio.transpose(1, 0))
