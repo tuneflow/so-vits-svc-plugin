@@ -3,16 +3,14 @@
     {
       "providerId": "andantei",
       "providerDisplayName": {
-        "zh": "Andantei行板",
+        "zh": "Andantei",
         "en": "Andantei"
       },
       "pluginId": "singing-voice-clone",
       "pluginDisplayName": {
-        "zh": "智能变声器",
-        "en": "Smart Vocal Changer"
+        "en": "Local Smart Vocal Changer"
       },
       "pluginDescription": {
-        "zh": "用全新的声音演绎指定歌声片段",
         "en": "Sing a vocal clip with a brand new voice"
       },
       "version": "1.0.0",
@@ -34,11 +32,9 @@
       "notices": {
         "copyrightDisclaimer": {
           "title": {
-            "zh": "免责声明",
             "en": "Disclaimer"
           },
           "content": {
-            "zh": "歌声模型仅供学术研究，其生成的歌声为虚拟合成，不代指任何真实世界的人物。软件仅供学术研究，请勿用于任何商业用途，软件对于生成结果免责。",
             "en": "The singing voice model is for academic research only. The generated singing voice is virtually synthesized and does not refer to any real-world personnel. The software is for academic research only, please do not use it for any commercial purposes. The software is not responsible for the generated results."
           },
           "showPopup": true,
@@ -46,22 +42,18 @@
         },
         "applyOnVocalTrack": {
           "title": {
-            "zh": "适用于纯人声轨道",
             "en": "Suitable for Pure Vocal Track"
           },
           "content": {
-            "zh": "请确保你的音频中只包含人声。如果是伴奏+人声的音频，请先使用“智能音频分轨”功能将人声分离出来。",
             "en": "Please make sure your audio only contains vocal. If it has accompaniment, please use the \"Smart Audio Source Separator\" plugin to separate the vocal out first."
           },
           "showPopup": true
         },
         "useSmallerClips": {
           "title": {
-            "zh": "如何避免超时",
             "en": "How to Avoid Timeout"
           },
           "content": {
-            "zh": "由于计算耗时可能较长，为避免超时，请尝试将你的音频分割为较短的片段并分别进行处理。",
             "en": "Due to high computation cost, try cutting your audio into shorter clips and then process them one by one."
           }
         }
