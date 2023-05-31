@@ -162,3 +162,4 @@ cython_debug/
 checkpoints
 hubert/checkpoint*.pt
 models.json
+ffmpeg.exe

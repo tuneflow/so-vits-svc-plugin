@@ -18,6 +18,9 @@ from torch.nn import functional as F
 from modules.commons import sequence_mask
 from hubert import hubert_model
 from pathlib import Path
+from tuneflow_py import Song, Clip
+from pydub import AudioSegment
+from io import BytesIO
 
 MATPLOTLIB_FLAG = False
 
@@ -555,3 +558,17 @@ class HParams():
 
   def __repr__(self):
     return self.__dict__.__repr__()
+  
+
+def trim_audio(audio_bytes: bytes, song: Song, clip: Clip):
+    clip_start_time = song.tick_to_seconds(clip.get_clip_start_tick())
+    clip_end_time = song.tick_to_seconds(clip.get_clip_end_tick())
+    audio_start_time = song.tick_to_seconds(clip.get_audio_start_tick()) # type:ignore
+    in_bytes_io = BytesIO(audio_bytes)
+    dub = AudioSegment.from_file(in_bytes_io)
+    trimmed_dub = dub[(clip_start_time - audio_start_time)
+                      * 1000:(clip_end_time - audio_start_time)*1000]
+    output = BytesIO()
+    trimmed_dub.export(output, format="wav")
+    output.seek(0)
+    return output.read()

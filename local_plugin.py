@@ -1,22 +1,21 @@
 from __future__ import annotations
 
-from tuneflow_py import TuneflowPlugin, Song, Clip, ParamDescriptor, WidgetType, TrackType, InjectSource, TuneflowPluginTriggerData, ClipAudioDataInjectData
+from tuneflow_py import TuneflowPlugin, Song, ParamDescriptor, WidgetType, TrackType, InjectSource, TuneflowPluginTriggerData, ClipAudioDataInjectData
 from typing import Any
-import tempfile
 import traceback
-from inferencer import vc_fn, MODEL_INVENTORY
-from io import BytesIO
-from pydub import AudioSegment
+from inferencer import vc_fn_model, load_custom_model_func
 from utils import trim_audio
+from tuneflow_devkit import Debugger
+from pathlib import Path
 
-class SingingVoiceClone(TuneflowPlugin):
+class SingingVoiceCloneLocal(TuneflowPlugin):
     @staticmethod
     def provider_id():
         return "andantei"
 
     @staticmethod
     def plugin_id():
-        return "singing-voice-clone"
+        return "singing-voice-clone-local"
 
     @staticmethod
     def params(song: Song) -> dict[str, ParamDescriptor]:
@@ -38,21 +37,31 @@ class SingingVoiceClone(TuneflowPlugin):
                     }
                 }
             },
-            "voiceLine": {
+            "modelFile": {
                 "displayName": {
-                    "zh": '声线',
-                    "en": 'Voice Line',
+                    "zh": '模型文件 (.pth)',
+                    "en": 'Model File (.pth)',
                 },
-                "defaultValue": 'yz',
+                "defaultValue": None,
                 "widget": {
-                    "type": WidgetType.Select.value,
+                    "type": WidgetType.FileSelector.value,
                     "config": {
-                        "options": [
-                            {
-                                "label": spec["name"],
-                                "value": spec["id"]
-                            } for spec in MODEL_INVENTORY
-                        ]
+                        "allowedExtensions": ["pth"],
+                        "selectLocalFile": True
+                    }
+                },
+            },
+            "configFile": {
+                "displayName": {
+                    "zh": '配置文件 (config.json)',
+                    "en": 'Config File (config.json)',
+                },
+                "defaultValue": None,
+                "widget": {
+                    "type": WidgetType.FileSelector.value,
+                    "config": {
+                        "allowedExtensions": ["json"],
+                        "selectLocalFile": True
                     }
                 },
             },
@@ -117,7 +126,8 @@ class SingingVoiceClone(TuneflowPlugin):
         pitchOffset: int = params["pitchOffset"]
         f0MeanPooling: bool = params["f0MeanPooling"]
         f0Threshold: float = params["f0Threshold"]
-        voiceLine: str = params['voiceLine']
+        model_file: str = params["modelFile"]
+        config_file: str = params["configFile"]
         trigger: TuneflowPluginTriggerData = params["trigger"]
         trigger_entity_id = trigger["entities"][0]  # type:ignore
         track = song.get_track_by_id(
@@ -130,7 +140,8 @@ class SingingVoiceClone(TuneflowPlugin):
         clip_audio_data_list: ClipAudioDataInjectData = params["clipAudioData"]
 
         try:
-            result = vc_fn(voiceLine, trim_audio(
+            model, spk = load_custom_model_func(config_path=config_file, ckpt_path=model_file)
+            result = vc_fn_model(model, spk, trim_audio(
             clip_audio_data_list[0]["audioData"]["data"], song, clip), vc_transform=pitchOffset, auto_f0=False, cluster_ratio=0, slice_db=-40,
                            noise_scale=0.4, pad_seconds=0.5, cl_num=0, lg_num=0, lgr_num=0.75, F0_mean_pooling=f0MeanPooling, enhancer_adaptive_key=0, cr_threshold=f0Threshold)
             if not result:
@@ -153,3 +164,7 @@ class SingingVoiceClone(TuneflowPlugin):
         except Exception as e:
             print(traceback.format_exc())
             raise e
+
+if __name__ == "__main__":
+    Debugger(plugin_class=SingingVoiceCloneLocal, bundle_file_path=str(
+        Path(__file__).parent.joinpath('bundle_local.json').absolute())).start()
