@@ -18,6 +18,19 @@ pip install -r requirements.txt
 
 除此之外，你还需要安装`ffmpeg`来将输入的音频转化成模型接受的输入格式。参考 [这里 (Windows)](https://zhuanlan.zhihu.com/p/118362010)， [这里 (Linux)](https://cloud.tencent.com/developer/article/1711770)，或 [这里 (macOS)](https://www.jianshu.com/p/f6990aee6c7f) 的安装教程。
 
+## (选做) 自动加载模型文件
+
+如果你想每次运行插件时都自动加载模型，你可以把模型和配置文件放到`checkpoints`目录下，这样整个目录结构看起来是这样的：
+
+```
+-- so-vits-svc-plugin
+    -- ......
+    -- checkpoints
+        -- G_XXX.pth
+        -- config.json
+    -- ......
+```
+
 ## 训练自己的模型
 
 参考 [炼丹百科全书](https://docs.qq.com/doc/DUWdxS1ZaV29vZnlV)，有非常易用的网页版训练界面。
@@ -46,7 +59,7 @@ Plugin Description: Sing a vocal clip with a new voice
 
 打开桌面版后，我们可以创建一首空白曲目，或者打开一首已有的曲子。
 
-曲目加载完成后，在界面右侧切换到 TuneFlow 插件库。在插件库面板的右上角点击"加载本地待测试插件"按钮来加载我们刚启动的插件。如果所有东西配置正确的话，你应该可以看到插件被加载到了插件库中。
+曲目加载完成后，在界面右侧切换到 TuneFlow 插件库。在插件库面板的右上角点击"**加载远程插件**"按钮，并在地址框中输入`http://127.0.0.1:8000/plugins/singing-voice-clone-local`。如果所有东西配置正确的话，你应该可以看到插件被加载到了插件库中。
 
 ![加载本地插件](./images/load_plugin_zh.jpg)
 

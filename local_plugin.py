@@ -5,8 +5,9 @@ from typing import Any
 import traceback
 from inferencer import vc_fn_model, load_custom_model_func
 from utils import trim_audio
-from tuneflow_devkit import Debugger
+from tuneflow_devkit import Runner
 from pathlib import Path
+import uvicorn
 
 class SingingVoiceCloneLocal(TuneflowPlugin):
     @staticmethod
@@ -19,6 +20,19 @@ class SingingVoiceCloneLocal(TuneflowPlugin):
 
     @staticmethod
     def params(song: Song) -> dict[str, ParamDescriptor]:
+        # Check if there is any .pth file in the checkpoints folder.
+        checkpoints_folder = Path(__file__).parent.joinpath("checkpoints")
+        checkpoint_path = None
+        config_path = None
+        if checkpoints_folder.exists():
+            # Find all files under checkpoints_folder, non-recursively.
+            checkpoints = [file for file in checkpoints_folder.iterdir() if file.is_file() and file.suffix == ".pth"]
+            if len(checkpoints) > 0:
+                checkpoint_path = str(checkpoints[0])
+                config_file_path = Path(__file__).parent.joinpath('checkpoints').joinpath("config.json")
+                if config_file_path.exists():
+                    config_path = str(config_file_path)
+
         return {
             "clipAudioData": {
                 "displayName": {
@@ -42,7 +56,7 @@ class SingingVoiceCloneLocal(TuneflowPlugin):
                     "zh": '模型文件 (.pth)',
                     "en": 'Model File (.pth)',
                 },
-                "defaultValue": None,
+                "defaultValue": checkpoint_path,
                 "widget": {
                     "type": WidgetType.FileSelector.value,
                     "config": {
@@ -56,7 +70,7 @@ class SingingVoiceCloneLocal(TuneflowPlugin):
                     "zh": '配置文件 (config.json)',
                     "en": 'Config File (config.json)',
                 },
-                "defaultValue": None,
+                "defaultValue": config_path,
                 "widget": {
                     "type": WidgetType.FileSelector.value,
                     "config": {
@@ -166,5 +180,6 @@ class SingingVoiceCloneLocal(TuneflowPlugin):
             raise e
 
 if __name__ == "__main__":
-    Debugger(plugin_class=SingingVoiceCloneLocal, bundle_file_path=str(
-        Path(__file__).parent.joinpath('bundle_local.json').absolute())).start()
+    app = Runner(plugin_class_list=[SingingVoiceCloneLocal], bundle_file_path=str(
+        Path(__file__).parent.joinpath('bundle_local.json').absolute())).start(path_prefix='/plugins/singing-voice-clone-local')
+    uvicorn.run(app)

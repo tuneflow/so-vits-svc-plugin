@@ -18,6 +18,21 @@ pip install -r requirements.txt
 
 In addition, you need `ffmpeg` to convert non-wave audio files to wave for the model to process. To install `ffmpeg`, follow the instruction [here (windows)](https://phoenixnap.com/kb/ffmpeg-windows) or [here (ubuntu)](https://phoenixnap.com/kb/install-ffmpeg-ubuntu) or [here (macOS)](https://phoenixnap.com/kb/ffmpeg-mac).
 
+## (Optional) Automatically Load Models
+
+If you want the plugin to load models on start up, you can optionally place your model file(.pth) and config file(config.json) under `checkpoints` folder.
+
+The folder structure would look like this:
+
+```
+-- so-vits-svc-plugin
+    -- ......
+    -- checkpoints
+        -- G_XXX.pth
+        -- config.json
+    -- ......
+```
+
 ## Run the Plugin
 
 Once you installed the dependencies and prepared the models, you can start running the plugin using:
@@ -42,8 +57,8 @@ Next, start TuneFlow Desktop, if you don't have it already, download from the ho
 
 Create an empty song, or open an existing song.
 
-Once the project is loaded, switch to the TuneFlow Plugin Library, at the top right corner, click on the "Load a local plugin in debug mode" button. If everything is setup correctly our plugin should load successfully and show up in the plugin inventory.
+Once the project is loaded, switch to the TuneFlow Plugin Library, at the top right corner, click on the "**Load a remotely hosted plugin**" button. And paste `http://127.0.0.1:8000/plugins/singing-voice-clone-local` into the address input. If everything is setup correctly our plugin should load successfully and show up in the plugin inventory.
 
-![Load local debug plugin](./images/load_plugin_en.jpg)
+![Load local plugin](./images/load_plugin_en.jpg)
 
 To run the plugin, right click on a vocal clip, in the run plugins menu, select this plugin.

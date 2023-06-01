@@ -163,3 +163,4 @@ checkpoints
 hubert/checkpoint*.pt
 models.json
 ffmpeg.exe
+*Zone.Identifier

@@ -71,7 +71,18 @@
         "1x": "https://s.tuneflow.com/images/plugins/icons/singing_voice_clone/singing_voice_clone@1x.png",
         "2x": "https://s.tuneflow.com/images/plugins/icons/singing_voice_clone/singing_voice_clone@2x.png"
       },
-      "categories": ["generate"]
+      "categories": ["generate"],
+      "localPlugin": {
+        "binaryUrl": {
+          "mac": {
+            "x64": "https://s.tuneflow.com/plugins/binary/singing-voice-clone-local/mac-x64"
+          },
+          "win": {
+            "x64": "https://s.tuneflow.com/plugins/binary/singing-voice-clone-local/win-x64"
+          }
+        },
+        "servingPath": "/plugins/singing-voice-clone-local"
+      }
     }
   ]
 }
