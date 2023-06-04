@@ -7,20 +7,17 @@ import logging
 import json
 import subprocess
 import warnings
-import random
 import functools
 
-import librosa
 import numpy as np
 from scipy.io.wavfile import read
 import torch
 from torch.nn import functional as F
-from modules.commons import sequence_mask
-from hubert import hubert_model
 from pathlib import Path
 from tuneflow_py import Song, Clip
 from pydub import AudioSegment
 from io import BytesIO
+from fairseq.checkpoint_utils import load_model_ensemble_and_task
 
 MATPLOTLIB_FLAG = False
 
@@ -214,8 +211,7 @@ def f0_to_coarse(f0):
 def get_hubert_model():
   vec_path = str(Path(__file__).parent.joinpath('hubert').joinpath('checkpoint_best_legacy_500.pt'))
   print("load model(s) from {}".format(vec_path))
-  from fairseq import checkpoint_utils
-  models, saved_cfg, task = checkpoint_utils.load_model_ensemble_and_task(
+  models, saved_cfg, task = load_model_ensemble_and_task(
     [vec_path],
     suffix="",
   )

@@ -10,6 +10,16 @@ git clone https://github.com/tuneflow/so-vits-svc-plugin.git
 
 ## Installation
 
+### (Option 1) Download Pre-Built Release
+
+You can also download a prebuilt package with all dependencies included, from the below links:
+
+[Download for Windows](https://plugin-dist.tuneflow.com/plugins/binary/svc_local/win-x64-1.0.0.zip)
+
+[Download for macOS (Coming Soon)](#)
+
+### (Option 2) Build from Source
+
 It is recommended to install through python virtual environments, so that these dependencies won't conflict with your existing pip packages.
 
 ```bash
@@ -25,7 +35,7 @@ If you want the plugin to load models on start up, you can optionally place your
 The folder structure would look like this:
 
 ```
--- so-vits-svc-plugin
+-- <root folder of the project>
     -- ......
     -- checkpoints
         -- G_XXX.pth
@@ -35,13 +45,19 @@ The folder structure would look like this:
 
 ## Run the Plugin
 
+### If You Downloaded Pre-built Release
+
+Unzip the app, and run the `local_app.exe` from the extracted folder.
+
+### If You Built from Source
+
 Once you installed the dependencies and prepared the models, you can start running the plugin using:
 
 ```bash
-python local_plugin.py
+python local_app.py
 ```
 
-You should see something like this in your console log:
+Once started, you should be able to see something like this:
 
 ```bash
 ============= Plugin Info =============
@@ -57,7 +73,7 @@ Next, start TuneFlow Desktop, if you don't have it already, download from the ho
 
 Create an empty song, or open an existing song.
 
-Once the project is loaded, switch to the TuneFlow Plugin Library, at the top right corner, click on the "**Load a remotely hosted plugin**" button. And paste `http://127.0.0.1:8000/plugins/singing-voice-clone-local` into the address input. If everything is setup correctly our plugin should load successfully and show up in the plugin inventory.
+Once the project is loaded, switch to the TuneFlow Plugin Library, at the top right corner, click on the "Load a remotely hosted plugin" button. And paste http://127.0.0.1:8000/plugins/singing-voice-clone-local into the address input. If everything is setup correctly our plugin should load successfully and show up in the plugin inventory.
 
 ![Load local plugin](./images/load_plugin_en.jpg)
 

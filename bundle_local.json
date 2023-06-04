@@ -17,7 +17,7 @@
       },
       "version": "1.0.0",
       "supportedPlatforms": ["desktop"],
-      "minRequiredDesktopVersion": "1.9.1",
+      "minRequiredDesktopVersion": "1.9.3",
       "options": {
         "allowReset": true,
         "allowManualApplyAdjust": true
@@ -74,11 +74,8 @@
       "categories": ["generate"],
       "localPlugin": {
         "binaryUrl": {
-          "mac": {
-            "x64": "https://s.tuneflow.com/plugins/binary/singing-voice-clone-local/mac-x64"
-          },
           "win": {
-            "x64": "https://s.tuneflow.com/plugins/binary/singing-voice-clone-local/win-x64"
+            "x64": "https://plugin-dist.tuneflow.com/plugins/binary/svc_local/win-x64-1.0.0.zip"
           }
         },
         "servingPath": "/plugins/singing-voice-clone-local"

@@ -5,9 +5,8 @@ from typing import Any
 import traceback
 from inferencer import vc_fn_model, load_custom_model_func
 from utils import trim_audio
-from tuneflow_devkit import Runner
 from pathlib import Path
-import uvicorn
+
 
 class SingingVoiceCloneLocal(TuneflowPlugin):
     @staticmethod
@@ -155,9 +154,12 @@ class SingingVoiceCloneLocal(TuneflowPlugin):
 
         try:
             model, spk = load_custom_model_func(config_path=config_file, ckpt_path=model_file)
-            result = vc_fn_model(model, spk, trim_audio(
-            clip_audio_data_list[0]["audioData"]["data"], song, clip), vc_transform=pitchOffset, auto_f0=False, cluster_ratio=0, slice_db=-40,
-                           noise_scale=0.4, pad_seconds=0.5, cl_num=0, lg_num=0, lgr_num=0.75, F0_mean_pooling=f0MeanPooling, enhancer_adaptive_key=0, cr_threshold=f0Threshold)
+            result = vc_fn_model(
+                model, spk, trim_audio(clip_audio_data_list[0]["audioData"]["data"],
+                                       song, clip),
+                vc_transform=pitchOffset, auto_f0=False, cluster_ratio=0, slice_db=-40, noise_scale=0.4,
+                pad_seconds=0.5, cl_num=0, lg_num=0, lgr_num=0.75, F0_mean_pooling=f0MeanPooling,
+                enhancer_adaptive_key=0, cr_threshold=f0Threshold)
             if not result:
                 raise Exception("Failed to generate audio")
             status, generated_data = result
@@ -178,8 +180,3 @@ class SingingVoiceCloneLocal(TuneflowPlugin):
         except Exception as e:
             print(traceback.format_exc())
             raise e
-
-if __name__ == "__main__":
-    app = Runner(plugin_class_list=[SingingVoiceCloneLocal], bundle_file_path=str(
-        Path(__file__).parent.joinpath('bundle_local.json').absolute())).start(path_prefix='/plugins/singing-voice-clone-local')
-    uvicorn.run(app)
