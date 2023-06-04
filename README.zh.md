@@ -81,7 +81,7 @@ Plugin Description: Sing a vocal clip with a new voice
 
 打开桌面版后，我们可以创建一首空白曲目，或者打开一首已有的曲子。
 
-曲目加载完成后，在界面右侧切换到 TuneFlow 插件库。在插件库面板的右上角点击"加载远程插件"按钮，并在地址框中输入`http://127.0.0.1:8000/plugins/singing-voice-clone-local`。如果所有东西配置正确的话，你应该可以看到插件被加载到了插件库中。
+曲目加载完成后，在界面右侧切换到 TuneFlow 插件库。在插件库面板的右上角点击"**加载远程插件**"按钮，并在地址框中输入`http://127.0.0.1:8000/plugins/singing-voice-clone-local`。如果所有东西配置正确的话，你应该可以看到插件被加载到了插件库中。
 
 ![加载本地插件](./images/load_plugin_zh.jpg)
 
