@@ -73,7 +73,7 @@ Next, start TuneFlow Desktop, if you don't have it already, download from the ho
 
 Create an empty song, or open an existing song.
 
-Once the project is loaded, switch to the TuneFlow Plugin Library, at the top right corner, click on the "Load a remotely hosted plugin" button. And paste http://127.0.0.1:8000/plugins/singing-voice-clone-local into the address input. If everything is setup correctly our plugin should load successfully and show up in the plugin inventory.
+Once the project is loaded, switch to the TuneFlow Plugin Library, at the top right corner, click on the "Load a remotely hosted plugin" button. And paste `http://127.0.0.1:8000/plugins/singing-voice-clone-local` into the address input. If everything is setup correctly our plugin should load successfully and show up in the plugin inventory.
 
 ![Load local plugin](./images/load_plugin_en.jpg)
 
