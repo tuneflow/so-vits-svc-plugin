@@ -8,16 +8,16 @@
       },
       "pluginId": "singing-voice-clone-local",
       "pluginDisplayName": {
-        "zh": "智能变声器 (本地版)",
-        "en": "Smart Vocal Changer (Local)"
+        "zh": "智能变声器本地版 (测试)",
+        "en": "Smart Vocal Changer (Local Beta)"
       },
       "pluginDescription": {
-        "zh": "用全新的声音演绎指定歌声片段",
-        "en": "Sing a vocal clip with a brand new voice"
+        "zh": "用全新的声音演绎指定歌声片段，支持加载本地自定义模型。",
+        "en": "Sing a vocal clip with a brand new voice. Support loading local custom models."
       },
       "version": "1.0.0",
       "supportedPlatforms": ["desktop"],
-      "minRequiredDesktopVersion": "1.9.3",
+      "minRequiredDesktopVersion": "1.9.4",
       "options": {
         "allowReset": true,
         "allowManualApplyAdjust": true
@@ -43,6 +43,16 @@
           },
           "showPopup": true,
           "requiresPopupConsent": true
+        },
+        "howToLoadModelsAutomatically": {
+          "title": {
+            "zh": "如何自动加载模型",
+            "en": "How to Load Models Automatically"
+          },
+          "content": {
+            "zh": "如需运行插件时自动加载模型，请将模型的.pth和config.json文件放到插件目录下的checkpoints文件夹中",
+            "en": "If you want to load models automatically when running the plugin, please put the .pth and config.json files of the model into the checkpoints folder under the plugin directory."
+          }
         },
         "applyOnVocalTrack": {
           "title": {
@@ -75,7 +85,7 @@
       "localPlugin": {
         "binaryUrl": {
           "win": {
-            "x64": "https://plugin-dist.tuneflow.com/plugins/binary/svc_local/win-x64-1.0.0.zip"
+            "x64": "https://plugin-dist.tuneflow.com/plugins/svc/binary/win-x64-1.0.0.zip"
           }
         },
         "servingPath": "/plugins/singing-voice-clone-local"

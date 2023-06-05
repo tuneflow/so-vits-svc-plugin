@@ -14,7 +14,7 @@ git clone https://github.com/tuneflow/so-vits-svc-plugin.git
 
 首先下载安装包：
 
-[Windows下载](https://plugin-dist.tuneflow.com/plugins/binary/svc_local/win-x64-1.0.0.zip)
+[Windows下载](https://plugin-dist.tuneflow.com/plugins/svc/binary/win-x64-1.0.0.zip)
 
 [macOS下载(即将推出)](#)
 

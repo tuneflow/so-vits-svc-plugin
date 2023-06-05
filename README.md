@@ -14,7 +14,7 @@ git clone https://github.com/tuneflow/so-vits-svc-plugin.git
 
 You can also download a prebuilt package with all dependencies included, from the below links:
 
-[Download for Windows](https://plugin-dist.tuneflow.com/plugins/binary/svc_local/win-x64-1.0.0.zip)
+[Download for Windows](https://plugin-dist.tuneflow.com/plugins/svc/binary/win-x64-1.0.0.zip)
 
 [Download for macOS (Coming Soon)](#)
 

@@ -132,6 +132,42 @@ class SingingVoiceCloneLocal(TuneflowPlugin):
                     }
                 },
             },
+            "modelBranch": {
+                "displayName": {
+                    "zh": '模型分支',
+                    "en": 'Model Branch',
+                },
+                "description": {
+                    "zh": '如果你使用的是Vec768分支，在此选中Vec768-Layer12，否则保持默认即可',
+                    "en": 'If you are using the Vec768 branch, select Vec768-Layer12, otherwise keep the default selection',
+                },
+                "defaultValue": 'v1',
+                "widget": {
+                    "type": WidgetType.Select.value,
+                    "config": {
+                        "options": [
+                            {
+                                "value": "v1",
+                                "label": 'v1'
+                            },
+                            {
+                                "value": "Vec768-Layer12",
+                                "label": 'Vec768-Layer12'
+                            }
+                        ]
+                    }
+                },
+            },
+            "hifiGanEnhance": {
+                "displayName": {
+                    "zh": 'HifiGan增强',
+                    "en": 'HifiGan Enhance',
+                },
+                "defaultValue": False,
+                "widget": {
+                    "type": WidgetType.Switch.value
+                },
+            },
         }
 
     @staticmethod
@@ -141,6 +177,8 @@ class SingingVoiceCloneLocal(TuneflowPlugin):
         f0Threshold: float = params["f0Threshold"]
         model_file: str = params["modelFile"]
         config_file: str = params["configFile"]
+        model_branch: str = params["modelBranch"]
+        hifi_gan_enhance: bool = params["hifiGanEnhance"]
         trigger: TuneflowPluginTriggerData = params["trigger"]
         trigger_entity_id = trigger["entities"][0]  # type:ignore
         track = song.get_track_by_id(
@@ -153,7 +191,9 @@ class SingingVoiceCloneLocal(TuneflowPlugin):
         clip_audio_data_list: ClipAudioDataInjectData = params["clipAudioData"]
 
         try:
-            model, spk = load_custom_model_func(config_path=config_file, ckpt_path=model_file)
+            model, spk = load_custom_model_func(
+                config_path=config_file, ckpt_path=model_file, model_branch=model_branch,
+                hifigan_enhance=hifi_gan_enhance)
             result = vc_fn_model(
                 model, spk, trim_audio(clip_audio_data_list[0]["audioData"]["data"],
                                        song, clip),
