@@ -28,6 +28,9 @@ pip install -r requirements.txt
 
 In addition, you need `ffmpeg` to convert non-wave audio files to wave for the model to process. To install `ffmpeg`, follow the instruction [here (windows)](https://phoenixnap.com/kb/ffmpeg-windows) or [here (ubuntu)](https://phoenixnap.com/kb/install-ffmpeg-ubuntu) or [here (macOS)](https://phoenixnap.com/kb/ffmpeg-mac).
 
+
+Lastly, you need to use `pyinstaller` to bundle your app into an .exe file that can be called by the TuneFlow Desktop app.
+
 ## (Optional) Automatically Load Models
 
 If you want the plugin to load models on start up, you can optionally place your model file(.pth) and config file(config.json) under `checkpoints` folder.
@@ -45,36 +48,10 @@ The folder structure would look like this:
 
 ## Run the Plugin
 
-### If You Downloaded Pre-built Release
-
-Unzip the app, and run the `local_app.exe` from the extracted folder.
-
-### If You Built from Source
-
-Once you installed the dependencies and prepared the models, you can start running the plugin using:
-
-```bash
-python local_app.py
-```
-
-Once started, you should be able to see something like this:
-
-```bash
-============= Plugin Info =============
-Provider ID: andantei
-Provider Name: Andantei
-Plugin ID: singing-voice-clone-local
-Plugin Name: Singing Voice Clone (Local)
-Plugin Description: Sing a vocal clip with a new voice
-=======================================
-```
-
-Next, start TuneFlow Desktop, if you don't have it already, download from the homepage [https://tuneflow.com](https://tuneflow.com).
+Start TuneFlow Desktop, if you don't have it already, download from the homepage [https://tuneflow.com](https://tuneflow.com).
 
 Create an empty song, or open an existing song.
 
-Once the project is loaded, switch to the TuneFlow Plugin Library, at the top right corner, click on the "**Load a remotely hosted plugin**" button. And paste `http://127.0.0.1:8000/plugins/singing-voice-clone-local` into the address input. If everything is setup correctly our plugin should load successfully and show up in the plugin inventory.
+Once the project is loaded, right click on an audio clip and run the "Smart Vocal Changer (Local Beta)" plugin. When it is running for the first time, you need to locate the plugin folder and hit the load plugin button.
 
-![Load local plugin](./images/load_plugin_en.jpg)
-
-To run the plugin, right click on a vocal clip, in the run plugins menu, select this plugin.
+Then, you can run the plugin as how you would use it like any other plugins. Note that the plugin needs some time to start running at its first run, please be patient while waiting.

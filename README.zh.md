@@ -30,6 +30,8 @@ pip install -r requirements.txt
 
 除此之外，你还需要安装`ffmpeg`来将输入的音频转化成模型接受的输入格式。参考 [这里 (Windows)](https://zhuanlan.zhihu.com/p/118362010)， [这里 (Linux)](https://cloud.tencent.com/developer/article/1711770)，或 [这里 (macOS)](https://www.jianshu.com/p/f6990aee6c7f) 的安装教程。
 
+最后，你需要用pyinstaller将local_app.py打包为local_app.exe，以便TuneFlow桌面版调用。
+
 ## (选做) 自动加载模型文件
 
 如果你想每次运行插件时都自动加载模型，你可以把模型和配置文件放到`checkpoints`目录下，这样整个目录结构看起来是这样的：
@@ -51,38 +53,10 @@ pip install -r requirements.txt
 
 ## 运行插件
 
-### 如果你下载了打包好的压缩包
-
-解压下载好的压缩包，运行其中的`local_app.exe`文件。
-
-### 如果你是从源文件直接构建
-
-当 python 依赖和模型文件准备完毕后，我们可以开始跑起来插件了。用以下命令运行插件:
-
-```bash
-python local_app.py
-```
-
-### 在 TuneFlow 中加载插件
-
-插件正常运行的情况下，你可以看到类似下面的控制台输出：
-
-```bash
-============= Plugin Info =============
-Provider ID: andantei
-Provider Name: Andantei
-Plugin ID: singing-voice-clone-local
-Plugin Name: Singing Voice Clone (Local)
-Plugin Description: Sing a vocal clip with a new voice
-=======================================
-```
-
-接下来，启动 TuneFlow 桌面版。如果你还没有下载的话，可以从 TuneFlow 首页下载： [https://tuneflow.com](https://tuneflow.com)。
+启动 TuneFlow 桌面版。如果你还没有下载的话，可以从 TuneFlow 首页下载： [https://tuneflow.com](https://tuneflow.com)。
 
 打开桌面版后，我们可以创建一首空白曲目，或者打开一首已有的曲子。
 
-曲目加载完成后，在界面右侧切换到 TuneFlow 插件库。在插件库面板的右上角点击"**加载远程插件**"按钮，并在地址框中输入`http://127.0.0.1:8000/plugins/singing-voice-clone-local`。如果所有东西配置正确的话，你应该可以看到插件被加载到了插件库中。
+在需要转换的音频片段上右键，在运行插件菜单中选择智能变声器本地版（测试）插件。第一次运行时会让你选择插件目录，这里选择你下载后解压的，或者从头构建的插件目录。
 
-![加载本地插件](./images/load_plugin_zh.jpg)
-
-最后，我们可以在需要转换的音频片段上右键，在运行插件菜单中选择本插件运行。
+这样，你就可以像任何其他插件一样使用本插件了。注意，插件第一次实际运行的时候需要一定的启动时间，请耐心等待。
