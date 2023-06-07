@@ -1,4 +1,5 @@
 tuneflow-devkit-py>=0.8.7
+tuneflow-py>=0.8.4
 # Flask
 # Flask_Cors
 # gradio
@@ -8,7 +9,7 @@ scipy==1.7.3
 SoundFile==0.12.1
 torch==1.13.1
 torchaudio==0.13.1
-torchcrepe
+torchcrepe==0.0.19
 tqdm
 scikit-maad
 praat-parselmouth

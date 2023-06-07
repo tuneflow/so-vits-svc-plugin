@@ -46,7 +46,7 @@ class SingingVoiceCloneLocal(TuneflowPlugin):
                 "injectFrom": {
                     "type": InjectSource.ClipAudioData.value,
                     "options": {
-                        "clips": "selectedAudioClips"
+                        "clips": "triggeredAudioClips"
                     }
                 }
             },
@@ -56,6 +56,10 @@ class SingingVoiceCloneLocal(TuneflowPlugin):
                     "en": 'Model File (.pth)',
                 },
                 "defaultValue": checkpoint_path,
+                "description": {
+                    "zh": '目前支持so-vits-svc 4.0模型。如需自动加载模型，请将.pth文件和config.json文件放在插件目录下的checkpoints文件夹下。',
+                    "en": 'Currently supports so-vits-svc 4.0 models. If you want to load the model automatically, please put the .pth file and config.json file in the checkpoints folder under the plugin directory.',
+                },
                 "widget": {
                     "type": WidgetType.FileSelector.value,
                     "config": {
@@ -138,8 +142,8 @@ class SingingVoiceCloneLocal(TuneflowPlugin):
                     "en": 'Model Branch',
                 },
                 "description": {
-                    "zh": '如果你使用的是Vec768分支，在此选中Vec768-Layer12，否则保持默认即可',
-                    "en": 'If you are using the Vec768 branch, select Vec768-Layer12, otherwise keep the default selection',
+                    "zh": '如果你不知道这个参数是什么意义，最好保持默认值，如果你确信使用的是Vec768分支，在此选中Vec768-Layer12。',
+                    "en": 'If you don\'t know about this param, keep it as default. If you are sure you are using the Vec768 branch, select Vec768-Layer12',
                 },
                 "defaultValue": 'v1',
                 "widget": {
